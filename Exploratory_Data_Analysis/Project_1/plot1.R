@@ -1,5 +1,5 @@
 
-# Code constructiong plot1.png
+# Code constructing plot1.png
 
 data <- read.table("household_power_consumption.txt", 
                    skip = 66645, nrows = 2879, 
@@ -10,10 +10,6 @@ data <- read.table("household_power_consumption.txt",
                                "Global_reactive_power","Voltage",
                                "Global_intensity","Sub_metering_1",
                                "Sub_metering_2","Sub_metering_3"))
-
-
-data$Time <- strptime(paste(data$Date, data$Time), 
-                     format = "%d/%m/%Y %H:%M:%S")
 
 png("plot1.png", width = 480, height = 480)
 
