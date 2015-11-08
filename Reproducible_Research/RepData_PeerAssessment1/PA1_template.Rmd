@@ -1,25 +1,221 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
+title: 'Reproducible Research: Peer Assessment 1'
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
+  pdf_document: default
 ---
 
 
 ## Loading and preprocessing the data
 
+First, we load the document using read.csv(), then we convert the date variable
+in the date format.
+
+```{r}
+data <- read.csv("activity.csv")
+data$date <- as.Date(data$date)
+```
 
 
 ## What is mean total number of steps taken per day?
 
+First, let's compute the total number of steps taken each day.
+
+```{r}
+stepsPerDay <- by(data$steps, data$date, sum)
+print(stepsPerDay)
+```
+
+Here is the histogram of the total number of steps taken each day.
+
+```{r}
+hist(stepsPerDay, 
+     breaks=10, 
+     main="Histogram of the total number of steps taken each day",
+     xlab="Number of steps per day", 
+     col="snow3")
+```
+
+Let's compute the mean and the median of the number of steps taken each day.
+
+```{r}
+meanSteps <- mean(stepsPerDay, na.rm=T)
+print(meanSteps)
+```
+
+```{r}
+medianSteps <- median(stepsPerDay, na.rm=T)
+print(medianSteps)
+```
 
 
 ## What is the average daily activity pattern?
 
+First, let's compute the average number of steps per interval, then let's
+draw the plot of the average daily activity.
 
+```{r}
+meanPerInterval <- by(data$steps, data$interval, mean, na.rm=T)
+plot(x = data$interval[1:288], 
+     y = meanPerInterval, 
+     type = "l", 
+     main = "Average daily activity per 5 minutes interval", 
+     xlab = "Interval", 
+     ylab = "Daily average number of steps", 
+     col="slateblue4")
+```
+
+We search for the index of meanPerInterval where the value is the maximum.
+
+```{r}
+indexMaxMean <- match(max(meanPerInterval), meanPerInterval)
+meanPerInterval[indexMaxMean]
+```
+
+The 5-minute interval, on average across all the days in the dataset, that contains the maximum number of steps is the interval 
+`r names(meanPerInterval[104])`. The average number of steps in this interval
+is `r meanPerInterval[104]` steps.
 
 ## Imputing missing values
 
+First, we compute the number of missing values in the dataset.
+
+```{r}
+sum(is.na(data$steps))
+```
+
+There are `r sum(is.na(data$steps))` missing values in this dataset.
+
+We are now going to fill the missing values. All the missing values 
+will be replaced by the average number of steps corresponding to that time interval.
+
+```{r}
+# Converting meanPerInterval in a dataframe
+names_meanPerInterval <- names(meanPerInterval)
+meanPerInterval <- data.frame(rbind(meanPerInterval))
+colnames(meanPerInterval) <- names_meanPerInterval
+
+# Initializing dataFill (= data without NAs)
+dataFill <- data
+for (i in 1:dim(dataFill)[1]) {
+      if (is.na(dataFill$steps[i])) {
+            dataFill$steps[i] <- meanPerInterval[[toString(dataFill$interval[i])]]
+      }
+}
+```
+
+
+Then, we make a histogram of the total number of steps taken each day.
+
+```{r}
+stepsPerDayFill <- by(dataFill$steps, dataFill$date, sum)
+hist(stepsPerDayFill, 
+     breaks=10, 
+     main="Histogram of the total number of steps taken each day (without NAs)",
+     xlab="Number of steps per day", 
+     col="snow3")
+```
+
+Let's compute the mean and the median of the number of steps taken each day, this
+time without the NAs.
+
+```{r}
+meanStepsFill <- mean(stepsPerDayFill)
+print(meanSteps)
+```
+
+```{r}
+medianStepsFill <- median(stepsPerDayFill)
+print(medianSteps)
+```
+
+Now, let's compute the difference between the mean and the median with and without
+NAs.
+
+```{r}
+meanStepsFill - meanSteps
+```
+
+```{r}
+as.numeric(medianStepsFill) - medianSteps
+```
+
+We can see that there is no difference. The average number of steps taken per
+day is the same with and without the missing values. However, filling the missing
+values did change something : the frequency of the mean value went up. To explain
+this, let's have a look at the missing values.
+
+```{r}
+str(split(data[is.na(data$steps),], data[is.na(data$steps),]$date))
+```
+
+We can see that the missing values were for 8 full days. Since we
+replace them with mean values by time interval, we artificially created 8 "average days". These averages days are added to the frequency, so we have 8 more average days now.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+First, let's add a new variable "weekDays", which has 2 factors : weekend or
+weekday.
+
+```{r}
+dayOfTheWeek <- function(date) {
+      if (weekdays(date)=="Sunday" || weekdays(date)=="Saturday") { 
+            return("weekend")
+      } else {
+            return("weekday")
+      }
+}
+
+dataFill$weekDays <- mapply(dayOfTheWeek, dataFill$date)
+```
+
+Let's plot the number of steps depending on the day of the week (weekend or weekday).
+
+```{r fig.height=10}
+
+# Creating 2 dataframes : one for the weekend, one for the weekdays
+dataFillSplit <-split(dataFill, dataFill$weekDays)
+dataFill$weekDays <- as.factor(dataFill$weekDays)
+dataFillWeekend <- dataFillSplit$weekend
+dataFillWeekday <- dataFillSplit$weekday
+
+# Computing the average number of steps per interval for each dataframe
+meanPerIntervalFillWeekend <- by(dataFillWeekend$steps, 
+                                 dataFillWeekend$interval, 
+                                 mean)
+
+meanPerIntervalFillWeekday <- by(dataFillWeekday$steps, 
+                                 dataFillWeekday$interval, 
+                                 mean)
+
+# Plots
+par(mfrow=c(2,1))
+
+plot(x = dataFill$interval[1:288], 
+     y = meanPerIntervalFillWeekday, 
+     type = "l", 
+     main = "Average daily activity per 5 minutes interval\nWeekday",
+     xlab = "Interval", 
+     ylab = "Daily average number of steps", 
+     col="slateblue4")
+
+plot(x = dataFill$interval[1:288], 
+     y = meanPerIntervalFillWeekend, 
+     type = "l", 
+     main = "Average daily activity per 5 minutes interval\nWeekend", 
+     xlab = "Interval", 
+     ylab = "Daily average number of steps", 
+     col="slateblue4")
+
+```
+
+
+On weekdays, the person seems to have a routine : there are clear spikes of
+activity at the same time each day. The most important spike is at the beginning of the day. On the weekend, this spike doesn't appear, so maybe this perso walks to go to work each morning. 
+
+
+
+
+
