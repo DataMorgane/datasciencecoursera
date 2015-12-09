@@ -18,6 +18,7 @@ NEI_Balt$type <- as.factor(NEI_Balt$type)
 
 g <- ggplot(NEI_Balt, aes(x = year, y = Emissions)) + 
     geom_bar(stat = "identity") + 
-    facet_wrap(~type)
+    facet_wrap(~type) +
+    labs(title = "Emissions of PM2.5 from different types of sources in Baltimore")
 
 ggsave(file = "plot3.png")
