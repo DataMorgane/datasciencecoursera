@@ -5,6 +5,8 @@
 #  Recognition Using Smartphones Dataset                               #
 ########################################################################
 
+library(plyr)
+
 # Reading test set
 test <- read.table("UCI HAR Dataset/test/X_test.txt")
 test_activity_id <- read.table("UCI HAR Dataset/test/y_test.txt")
@@ -76,7 +78,6 @@ data_sub <- data[,c("subject_id",
 #  and each subject                                                         #
 #############################################################################
 
-library(plyr)
 data_average <- ddply(data_sub, .(subject_id, activity_name), numcolwise(mean))
 
 # Writing the final dataset in a file
