@@ -16,7 +16,7 @@ First, the script will read the files we are interested in.
 
 ## Labeling the variables
 
-The features in the test and training sets are not named, and the datasets used identifiers instead of names for the type of activity.
+The features in the test and training sets are not named, and the datasets use identifiers instead of names for the type of activity.
 
 The script will assign meaningfull names to the variables.
 
