@@ -57,9 +57,9 @@ train_data <- cbind(train_subject_id, train_activity_name, train)
 data <- rbind(test_data, train_data)
 
 
-##########################################################
-#  Extract the mean and standard deviation measurements  #
-##########################################################
+#############################################################
+#  Extracting the mean and standard deviation measurements  #
+#############################################################
 
 # Getting the names of the variables measuring mean and standard deviation
 names_mean <- grep(pattern = ".*-mean[()].*", x = colnames(data), value = TRUE)
