@@ -1,6 +1,6 @@
 # Timeline and consequences of the major natural disasters in the USA from 1996 to 2011
 Morgane Flauder  
-December 16, 2015  
+December 18, 2015  
 
 This document is an assignment for the Reproducible Research course (Johns Hopkins University) on Coursera.
 
@@ -19,9 +19,12 @@ First, let's upload some libraries, download the dataset and read the data.
 library(plyr)
 library(outliers)
 
-# Dowloading and reading the data
-#download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2",
-#              "repdata-data-StormData.csv.bz2")
+# Downloading and reading the data
+
+# Downloading doesn't work well with Knitr. You can copy and paste this command
+# to download the dataset
+# download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2",
+#               "repdata-data-StormData.csv.bz2")
 
 data <- read.csv("repdata-data-StormData.csv.bz2", na.strings = c("NA",""))
 ```
@@ -471,7 +474,6 @@ legend("top",
 
 ![](https://rawgit.com/DataMorgane/datasciencecoursera/master/Reproducible_Research/PeerAssessment2/storm_analysis_files/figure-html/unnamed-chunk-14-1.svg)
 
-
 We can see that even if the heat was the deadliest type of event between 1996 and 2011, it was from 2 separates heat waves in 1999 and 2006. However, the natural disaster that killed the most people in 1 year was the tornado category in 2011, due to the 2011 Super Outbreak.
 
 Tornadoes are the natural disasters that causes the more injuries. That is particularly true in 2011, the year of the 2011 Super Outbreak. But we can also see that the Texas 1998 Floods that followed Hurricane Madeline left a very high number of injured people, even a little more than the tornadoes victims in 2011.
@@ -529,7 +531,7 @@ text(2004, 20.5, "2004\nHurricane Jeanne", col = "green3")
 text(2008, 6.5, "2008\nHurricane Ike", col = "green3")
 text(2010.5, 12, "2011 Super\nOutbreak", col = "mediumorchid")
 text(2010.5, 18, "2011 Mississippi\nRiver floods", col = "turquoise3")
-legend("topleft",
+legend("topright",
        legend = c("Flood", "Hurricane", "Storm Surge", "Tornado"),
        col = c("turquoise3", "green3", "slateblue", "mediumorchid"),
        lty = c(1,1,1,1),
@@ -573,7 +575,7 @@ legend("topright",
        lwd = 2)
 ```
 
-![](https://rawgit.com/DataMorgane/datasciencecoursera/master/Reproducible_Research/PeerAssessment2/storm_analysis_files/figure-html/unnamed-chunk-16-1.svg)
+![](https://rawgit.com/DataMorgane/datasciencecoursera/master/Reproducible_Research/PeerAssessment2/storm_analysis_files/figure-html/unnamed-chunk-16-1.svg) 
 
 First, we can see that Hurrican Katrina was by very far the most expensive natural disaster of these years, with 50 billions dollars from the hurricane and close to 40 billions dollars from the storm surge that went with it. Hurricanes in general are very expensive in terms of property, with Hurricane Jeanne in 2004, Hurricane Floyd and Irene in 1999, and Hurricane Ike in 2008. Floods are also very expensive, with the 1997 Red River Flood and the 2006 Mid-Atlantic Flood. There was also a lot of damage in 2011 due to the 2011 Super outbreak (tornadoes) and the floods it caused (the heavy rains caused the Mississippi River to overflow).
 
