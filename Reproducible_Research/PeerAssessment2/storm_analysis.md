@@ -475,7 +475,7 @@ legend("top",
 ```
 
 ![](https://rawgit.com/DataMorgane/datasciencecoursera/master/Reproducible_Research/PeerAssessment2/storm_analysis_files/figure-html/unnamed-chunk-14-1.svg)
-<img src="https://rawgit.com/DataMorgane/datasciencecoursera/master/Reproducible_Research/PeerAssessment2/storm_analysis_files/figure-html/unnamed-chunk-14-1.svg">
+
 
 We can see that even if the heat was the deadliest type of event between 1996 and 2011, it was from 2 separates heat waves in 1999 and 2006. However, the natural disaster that killed the most people in 1 year was the tornado category in 2011, due to the 2011 Super Outbreak.
 
