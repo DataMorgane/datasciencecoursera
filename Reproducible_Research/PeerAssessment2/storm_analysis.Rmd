@@ -1,8 +1,12 @@
 ---
-title: "Timeline and consequences of the major natural disasters in the USA from 1996 to 2011"
+title: Timeline and consequences of the major natural disasters in the USA from 1996
+  to 2011
 author: "Morgane Flauder"
-date: "December 16, 2015"
-output: html_document
+date: "December 18, 2015"
+output:
+  html_document:
+    keep_md: yes
+  pdf_document: default
 ---
 
 This document is an assignment for the Reproducible Research course (Johns Hopkins University) on Coursera. 
@@ -21,12 +25,14 @@ First, let's upload some libraries, download the dataset and read the data.
 library(plyr)
 library(outliers)
 
-# Dowloading and reading the data
-#download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2",
-#              "repdata-data-StormData.csv.bz2")
+# Downloading and reading the data
+
+# Downloading doesn't work well with Knitr. You can copy and paste this command
+# to download the dataset
+# download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2",
+#               "repdata-data-StormData.csv.bz2")
 
 data <- read.csv("repdata-data-StormData.csv.bz2", na.strings = c("NA",""))
-dim(data)
 ```
 
 ### Selection of the observations of interest
@@ -472,7 +478,7 @@ text(2004, 20.5, "2004\nHurricane Jeanne", col = "green3")
 text(2008, 6.5, "2008\nHurricane Ike", col = "green3")
 text(2010.5, 12, "2011 Super\nOutbreak", col = "mediumorchid")
 text(2010.5, 18, "2011 Mississippi\nRiver floods", col = "turquoise3")
-legend("topleft",
+legend("topright",
        legend = c("Flood", "Hurricane", "Storm Surge", "Tornado"),
        col = c("turquoise3", "green3", "slateblue", "mediumorchid"),
        lty = c(1,1,1,1),
