@@ -578,7 +578,7 @@ legend("topright",
        lwd = 2)
 ```
 
-![](storm_analysis_files/figure-html/unnamed-chunk-16-1.svg?raw=true)
+![](https://rawgit.com/DataMorgane/datasciencecoursera/master/Reproducible_Research/PeerAssessment2/storm_analysis_files/figure-html/unnamed-chunk-16-1.svg)
 
 First, we can see that Hurrican Katrina was by very far the most expensive natural disaster of these years, with 50 billions dollars from the hurricane and close to 40 billions dollars from the storm surge that went with it. Hurricanes in general are very expensive in terms of property, with Hurricane Jeanne in 2004, Hurricane Floyd and Irene in 1999, and Hurricane Ike in 2008. Floods are also very expensive, with the 1997 Red River Flood and the 2006 Mid-Atlantic Flood. There was also a lot of damage in 2011 due to the 2011 Super outbreak (tornadoes) and the floods it caused (the heavy rains caused the Mississippi River to overflow).
 
