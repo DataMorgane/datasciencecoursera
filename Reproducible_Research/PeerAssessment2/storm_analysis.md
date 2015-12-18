@@ -24,11 +24,6 @@ library(outliers)
 #              "repdata-data-StormData.csv.bz2")
 
 data <- read.csv("repdata-data-StormData.csv.bz2", na.strings = c("NA",""))
-dim(data)
-```
-
-```
-## [1] 902297     37
 ```
 
 ### Selection of the observations of interest
