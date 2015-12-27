@@ -1,0 +1,105 @@
+---
+title: "Inferential data analysis"
+author: "Morgane Flauder"
+date: "December 27, 2015"
+output: pdf_document
+---
+
+# Analysis of the ToothGrowth data
+
+In this assignment, we are going to analyze the ToothGrowth data in the R datasets package. This dataset show the effect of Vitamin C on tooth growth in Guinea Pigs.
+
+
+## Exploratory analysis
+
+Let's do a summary of the data.
+
+```{r}
+library(datasets)
+data("ToothGrowth")
+
+summary(ToothGrowth)
+```
+
+We can see that there is 3 variables : len, the variable of interest (the length of the tooth), supp (the supplement type : orange juice (OJ) or ascorbic acid (VC)), and the dose in mg.
+
+```{r}
+table(ToothGrowth$dose, ToothGrowth$supp)
+```
+
+We can see that for each type of supplement, 3 doses (0.5, 1 and 2mg) were tested on 10 subject each.
+
+Let's plot the length of the tooth in function of the supplement type and the dose.
+
+```{r}
+# Exploratory graphs
+par(mfrow = c(1,2))
+
+# Tooth growth in function of supp
+plot(ToothGrowth$len ~ ToothGrowth$supp,
+     main = "Tooth growth in\nfunction of supp",
+     xlab = "Supp",
+     ylab = "Tooth growth")
+
+# Tooth growth in function of dose for different supp
+plot(ToothGrowth$len[ToothGrowth$supp=="OJ"] ~ ToothGrowth$dose[ToothGrowth$supp=="OJ"],
+     col = "red",
+     pch = 20,
+     main = "Tooth growth in function\nof dose for different supp",
+     xlab = "Dose",
+     ylab = "Tooth growth")
+points(ToothGrowth$len[ToothGrowth$supp=="VC"] ~ ToothGrowth$dose[ToothGrowth$supp=="VC"],
+       col = "blue",
+       pch = 20)
+legend("bottomright",
+       legend = c("supp = OJ", "supp = VC"),
+       pch = 20,
+       col = c("red", "blue"),
+       cex = 0.8)
+```
+
+
+We can see that on average, orange juice (OJ) supplement seems to induce more tooth growth, but for ascorbic acid (VC), there are more extreme values (minimum and maximum). We can also see that higher doses seem to be more effective.
+
+Let's check theses theories with statistical methods.
+
+
+## Comparison of tooth growth by supp
+
+We assume that the variance of the length is not equal for the two supplement types. Indeed, there are more extreme values for the ascorbic acid (VC). We also assume that the data aren't paired : the subjects are entirely different. Since the sample size is small (30 subject for each supplement type), we are going to perform a Student Test.
+
+
+```{r}
+t.test(len ~ supp, 
+       paired = FALSE, 
+       var.equal = FALSE, 
+       data = ToothGrowth)
+```
+
+The p-value is superior to 0.05 and the confidence interval includes zero, therefore we can't conclude that the means are significantly different with 95% confidence. We conclude that there is no difference between the two supplement types.
+
+## Comparison of tooth growth by dose
+
+We are now going to test the difference between the dose of Vitamin C. We are going to compare two doseS : 0.5 and 2mg. Let's assume that the variances are equal and the data aren't paired. There are 20 subjects for each dose, so we are going to perform a Student Test.
+
+```{r}
+t.test(len ~ dose, 
+       paired = FALSE, 
+       var.equal = TRUE, 
+       data = ToothGrowth[ToothGrowth$dose != 1,])
+```
+
+We can see that the p-value is very small and the confidence interval is negative and between -18.2 and -12.8. There is a significant difference between the two means with 95% confidence. We can conclude that the 0.5mg dose is significantly less effective than the 2mg dose.
+
+
+
+
+
+
+
+
+
+
+
+
+

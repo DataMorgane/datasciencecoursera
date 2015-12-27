@@ -1,0 +1,119 @@
+---
+title: "Simulation Project"
+author: "Morgane Flauder"
+date: "December 27, 2015"
+output: pdf_document
+---
+
+
+# The Central Limit Theorem and the exponential distribution
+
+In this project, I will investigate the exponential distribution and compare it to the Central Limit Theorem. I will compare the sample mean and variance of simulations with the theoretical mean and variance of the exponential distribution. For this purpose, I will do 1000 simulations of the averages of 40 exponentials. I will set the parameter $\lambda$ to 0.2.
+
+## Comparison between the sample mean and the theoretical mean
+
+Since I used $\lambda = 0.2$, the theoretical mean is $\mu = \frac{1}{\lambda} = \frac{1}{0.2} = 5$.
+
+I created a vector of 1000 simulations for the means of 40 exponentials.
+
+```{r}
+# Simulations of the means
+set.seed(60)
+mexp <- NULL
+for (i in 1:1000) mexp <- c(mexp, mean(rexp(40,0.2)))
+```
+
+The mean of these 1000 simulations is :
+
+```{r}
+mean(mexp)
+```
+
+We can see that it's really close to the theoretical mean of 5.
+
+
+## Comparison between the sample variance of the mean and the theoretical variance of the mean
+
+We know that the variance of the sample mean is the population variance divided by $n$. The sample variance of the mean is $\frac{\sigma ^2}{n} = \frac{(1/\lambda)^2}{n} = \frac{(1/0.2)^2}{n} = \frac{25}{40} = 0.625$.
+
+```{r}
+var(mexp)
+```
+
+We can see that the sample variance of the mean is close to the theoretical variance of the mean of 0.625.
+
+## Comparison between the sample variance and the theoratical variance
+
+We know that the variance of the exponential distribution is $\sigma^2$. Since $\lambda = 0.2$ and $\sigma = \frac{1}{\lambda}$, the theoretical variance is $\sigma^2 = (\frac{1}{\lambda})^2 = (\frac{1}{0.2})^2 = 5^2 = 25$.
+
+Let's do 1000 simulations of the variance of 40 exponentials.
+
+```{r}
+# Simulations of the variances
+set.seed(60)
+vexp <- NULL
+for (i in 1:1000) vexp <- c(vexp, var(rexp(40,0.2)))
+```
+
+Let's compute the mean of the variances.
+
+```{r}
+mean(vexp)
+```
+
+We can see that this value is close to the theoretical variance of 25.
+
+
+## Distribution
+
+We are now going to check that the distribution of the means of the simulations follows a normal distribution.
+
+We know that $\frac{\bar X_n - \mu}{\sigma / \sqrt{n}}$ follows a standard normal distribution.
+To verify this, I computed $\frac{mexp - \mu}{\sigma / \sqrt{n}} = \frac{mexp - 5}{5 / \sqrt{40}}$.
+I plotted the density of this vector and compared it to a standard normal distribution.
+
+```{r}
+sigma <- 5
+mu <- 5
+n <- 40
+norm_mexp <- (mexp - mu) / (sigma / sqrt(n))
+
+# Plot
+hist(norm_mexp,
+     freq = FALSE,
+     breaks = 20,
+     main = "Density of the averages of 1000 simulations\nof 40 exponential distributions",
+     xlab = "x",
+     ylim = c(0,0.4))
+# Vertical line on the sample mean
+abline(v = mean(norm_mexp), 
+       col = "red", 
+       lwd = 4)
+# Normal distribution reference
+curve(dnorm(x,0,1), 
+      add = TRUE, 
+      col = "darkblue", 
+      lwd=2)
+legend("topright",
+       legend = c(paste("Sample Mean = ", round(mean(norm_mexp), digits = 2)), 
+                  "Standard normal distribution"),
+       col = c("red", "darkblue"),
+       lty = c(1,1),
+       lwd = 2,
+       cex = 0.75)
+
+```
+
+
+We can see that the sample mean is centered on 0, the theoretical mean of the standard normal distribution, and follow roughly a standard normal distribution of $\mu = 0$ and $\sigma = 1$.
+
+
+
+
+
+
+
+
+
+
+
