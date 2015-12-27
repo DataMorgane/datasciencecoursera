@@ -12,7 +12,7 @@ In this assignment, we are going to analyze the ToothGrowth data in the R datase
 
 ## Exploratory analysis
 
-Let's do a summary of the data.
+Let's look at the data.
 
 ```{r}
 library(datasets)
@@ -31,7 +31,7 @@ We can see that for each type of supplement, 3 doses (0.5, 1 and 2mg) were teste
 
 Let's plot the length of the tooth in function of the supplement type and the dose.
 
-```{r}
+```{r, echo = FALSE}
 # Exploratory graphs
 par(mfrow = c(1,2))
 
@@ -73,10 +73,10 @@ We assume that the variance of the length is not equal for the two supplement ty
 t.test(len ~ supp, 
        paired = FALSE, 
        var.equal = FALSE, 
-       data = ToothGrowth)
+       data = ToothGrowth)$p.value
 ```
 
-The p-value is superior to 0.05 and the confidence interval includes zero, therefore we can't conclude that the means are significantly different with 95% confidence. We conclude that there is no difference between the two supplement types.
+The p-value is superior to 0.05, therefore we can't conclude that the means are significantly different with 95% confidence. We conclude that there is no difference between the two supplement types.
 
 ## Comparison of tooth growth by dose
 
@@ -86,15 +86,35 @@ We are now going to test the difference between the dose of Vitamin C. We are go
 t.test(len ~ dose, 
        paired = FALSE, 
        var.equal = TRUE, 
-       data = ToothGrowth[ToothGrowth$dose != 1,])
+       data = ToothGrowth[ToothGrowth$dose != 1,])$p.value
+
+t.test(len ~ dose, 
+       paired = FALSE, 
+       var.equal = TRUE, 
+       data = ToothGrowth[ToothGrowth$dose != 1,])$conf[1:2]
 ```
 
 We can see that the p-value is very small and the confidence interval is negative and between -18.2 and -12.8. There is a significant difference between the two means with 95% confidence. We can conclude that the 0.5mg dose is significantly less effective than the 2mg dose.
 
 
+## Comparison of tooth growth by dose for a specific dose
 
+We are now going to compare the tooth growth for the different supplement types and for the 1mg dose.
+We assume that the variances are equal and the data aren't paired.
 
+```{r}
+t.test(len ~ supp, 
+       paired = FALSE, 
+       var.equal = TRUE, 
+       data = ToothGrowth[ToothGrowth$dose == 1,])$p.value
 
+t.test(len ~ supp, 
+       paired = FALSE, 
+       var.equal = TRUE, 
+       data = ToothGrowth[ToothGrowth$dose == 1,])$conf[1:2]
+```
+
+The p-value is inferior to 0.05 and the confidence interval is positive and between 2.8 and 9.0, therefore there is a significant difference between the two mean with 95% confidence. We can conclude that with a 1mg dose, orange juice (OJ) is more effective than ascorbic acid (VC).
 
 
 
