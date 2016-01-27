@@ -105,19 +105,17 @@ The variables that influence `mpg` the most, associated with `am`, are `vs` (the
 
 ## Figure 1
 
-```{r boxplot, fig.width=6, fig.height=6}
+```{r boxplot, fig.width=4, fig.height=4}
 boxplot(mpg ~ am, data = mtcars, 
         ylab = "Miles per gallon", xlab = "Transmission", xaxt = "n",
         main = "Difference in miles per gallon for\nautomatic and manual transmissions")
 axis(1, at = c(1,2), labels = c("Automatic", "Manual"))
 ```
 
-\newpage
 
 ## Figure 2
 
-
-```{r residuals, fig.width=5, fig.height=5}
+```{r residuals, fig.width=3.5, fig.height=3.5}
 plot(fit_am)
 ```
 
