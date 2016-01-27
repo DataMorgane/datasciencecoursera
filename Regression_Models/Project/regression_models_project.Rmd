@@ -1,0 +1,155 @@
+---
+title: "Regression Models Course Project"
+author: "Morgane Flauder"
+date: "January 27, 2016"
+output: pdf_document 
+geometry: margin=0.5in
+---
+
+```{r, echo = FALSE}
+data(mtcars)
+```
+
+## Summary
+
+In this project, I will work on the dataset `mtcars` which comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles. I will analyze the influence of the type of transmission (automatic or manual) on the MPG (miles per gallon) for these cars.
+
+I found that manual transmission leads to 6.8 more miles per gallon, so the manual transmission is better for MPG.
+
+## Exploratory Analysis
+
+First, let's visualize the repartition of MPG for the two types of transmissions.
+
+As we can see in figure 1 (see appendix), it seems that the MPG is higher with the manual transmission compared to the automatic. The difference in means of MPG is :
+
+```{r}
+mean(mtcars$mpg[mtcars$am == 1]) - mean(mtcars$mpg[mtcars$am == 0])
+```
+
+We are now going to explore this hypothesis by using linear regression models.
+
+## Analysis of the influence of the type of transmission on MPG
+
+### Initial model
+
+First, let's create a simple model where MPG is only predicted by the type of transmission.
+
+```{r}
+fit_am <- lm(mpg ~ am, data = mtcars)
+summary(fit_am)$coefficient
+```
+
+We can see that according to this model, cars with manual transmissions have 7.24 more miles per gallon, which is exactly the difference in the means computed previously.
+
+However, this model may be too simple. To verify this, let's analyze the plots of the residuals (see appendix, figure 2). The residuals should be scattered accros the horizontal line at 0 with no significant pattern. However, that is not the case. In fact, the predictive variable `am` we used is a factor variable, and shouldn't be used alone in a linear regression model.
+
+### Extended model
+
+We are now going to construct a more complex model. To choose which variables to use, I computed the correlation between `mpg` and all the other variable. I selected the variables with a correlation over 0.5 or under -0.5.
+
+```{r}
+abs(cor(mtcars)[1,]) > 0.5
+```
+
+Since `qsec` and `gear` aren't strongly correlated with `mpg`, I choose to use the other 8 variables as predictors.
+
+```{r}
+fit_8 <- lm(mpg ~ cyl + disp + hp + drat + wt + vs + am + carb, data = mtcars)
+```
+
+Since none of these features are significative at $\alpha = 5\%$ (see appendix, figure 3), I computed the Variance Inflation Factor (VIF) for this model.
+
+```{r}
+library(car)
+vif(fit_8)
+```
+
+We can see that `cyl`, `disp`, `hp` and `wt` have high VIF (relatively to the other variables), which means they might be collinear. I choose to construct a new model without these variables.
+
+### Refined model
+
+This model use the variables `drat`, `vs`, `am` and `carb`.
+
+```{r}
+fit_4 <- lm(mpg ~ drat + vs + am + carb, data = mtcars)
+```
+
+All the variables are significant at $\alpha = 5\%$ except `drat` (see appendix, figure 4).
+
+### Final model
+
+I created a last model by removing `drat` from the previous one.
+
+```{r}
+fit_3 <- lm(mpg ~ vs + am + carb, data = mtcars)
+```
+
+All the variables are significant at $\alpha = 5\%$ (see appendix, figure 5).
+
+### Choosing the best model
+
+I performed an analysis of variance (ANOVA) in order to choose the best model (see appendix, figure 6).
+
+We can see that Model 2 (`fit_3`) significantly improved the initial model at $\alpha = 5\%$. However, it is not the case for the other ones.
+
+### Conclusion
+
+The variables that influence `mpg` the most, associated with `am`, are `vs` (the type of engine : V-engine or straight engine) and `carb` (the number of carburetors). This model shows that having a manual transmission result in an increase of MPG. In this model, MPG increase by 6.8 miles per gallon for a manual transmission compared to an automatic one.
+
+```{r}
+
+```
+\newpage
+
+# Appendix
+
+## Figure 1
+
+```{r boxplot, fig.width=6, fig.height=6}
+boxplot(mpg ~ am, data = mtcars, 
+        ylab = "Miles per gallon", xlab = "Transmission", xaxt = "n",
+        main = "Difference in miles per gallon for\nautomatic and manual transmissions")
+axis(1, at = c(1,2), labels = c("Automatic", "Manual"))
+```
+
+\newpage
+
+## Figure 2
+
+
+```{r residuals, fig.width=5, fig.height=5}
+plot(fit_am)
+```
+
+
+## Figure 3
+
+
+```{r}
+summary(fit_8)
+```
+
+
+## Figure 4
+
+```{r}
+summary(fit_4)
+```
+
+
+## Figure 5
+
+
+```{r}
+summary(fit_3)
+```
+
+
+## Figure 6
+
+```{r}
+anova(fit_am, fit_3, fit_4, fit_8)
+```
+
+
+
