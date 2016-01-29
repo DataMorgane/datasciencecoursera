@@ -95,18 +95,34 @@ shinyUI(fluidPage(
                plotOutput(outputId = "main_plot", width = "100%")
         ),
         
-        # Linear model summary
+        # Linear model summary and documentation
         column(3,
+               
+               # Summary
                h4("Linear model summary :"),
                p("R-squared :"),
                verbatimTextOutput("lm_rsquared"),
                p("Coefficients :"),
                verbatimTextOutput("lm_coef"),
                p("Correlation between the variables :"),
-               verbatimTextOutput("lm_corr")
+               verbatimTextOutput("lm_corr"),
+               
+               # Documentation
+               h4("Documentation"),
+               h5("What does this application do ?"),
+               p("This Shiny web application plots a set of points into a grid, compute 
+          a linear model, and then plot the linear regression line. It also
+          displays a summary of the linear model."),
+               h5("How to use it ?"),
+               p("You should enter your set of values in the 'x' and 'y' fields, separated 
+          by commas (for example : 1,2,3). Then, click the 'Plot' button. You
+          can modify the color, size, and type of the points by choosing it
+          in the section 'Graphical parameters (points)'. Then, click on the 
+          'Fit a linear model' button to plot the regression line and display
+          the summary. You can modify the color, width, and type of line
+          in the section 'Graphical parameters (line)'.")
                )
     )
-    
 ))
 
 
